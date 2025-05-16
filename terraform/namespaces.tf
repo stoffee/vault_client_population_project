@@ -1,6 +1,6 @@
-data "vault_namespace" "admin" {
-  path = "admin"
-}
+#data "vault_namespace" "admin" {
+#  path = "admin"
+#}
 
 resource "vault_namespace" "databases" {
   path      = "databases"
