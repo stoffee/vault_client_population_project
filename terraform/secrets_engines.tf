@@ -1,6 +1,6 @@
 # KV Secrets Engines
 resource "vault_mount" "kv_applications" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.applications.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.applications.path}"
   path      = "kv"
   type      = "kv"
   options = {
@@ -9,7 +9,7 @@ resource "vault_mount" "kv_applications" {
 }
 
 resource "vault_mount" "kv_shared" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.shared.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.shared.path}"
   path      = "kv"
   type      = "kv"
   options = {
@@ -19,28 +19,28 @@ resource "vault_mount" "kv_shared" {
 
 # Database Secrets Engine
 resource "vault_mount" "db_databases" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.databases.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
   path      = "database"
   type      = "database"
 }
 
 # PKI Secrets Engines
 resource "vault_mount" "pki_web" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.pki_web.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.pki_web.path}"
   path      = "pki"
   type      = "pki"
   max_lease_ttl_seconds = 31536000 # 1 year
 }
 
 resource "vault_mount" "pki_internal" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.pki_internal.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.pki_internal.path}"
   path      = "pki"
   type      = "pki"
   max_lease_ttl_seconds = 31536000 # 1 year
 }
 
 resource "vault_mount" "pki_x509" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.x509.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.x509.path}"
   path      = "pki"
   type      = "pki"
   max_lease_ttl_seconds = 31536000 # 1 year
@@ -48,21 +48,21 @@ resource "vault_mount" "pki_x509" {
 
 # Transit Secrets Engine
 resource "vault_mount" "transit_encryption" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.encryption.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.encryption.path}"
   path      = "transit"
   type      = "transit"
 }
 
 # AWS Secrets Engine
 resource "vault_mount" "aws_cloud" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.cloud.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.cloud.path}"
   path      = "aws"
   type      = "aws"
 }
 
 # SSH Secrets Engine
 resource "vault_mount" "ssh" {
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.ssh.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.ssh.path}"
   path      = "ssh"
   type      = "ssh"
 }

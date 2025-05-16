@@ -1,31 +1,31 @@
 resource "vault_auth_backend" "approle_databases" {
   type      = "approle"
   path      = "approle"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.databases.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
 }
 
 resource "vault_auth_backend" "approle_pki_internal" {
   type      = "approle"
   path      = "approle"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.pki_internal.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.pki_internal.path}"
 }
 
 resource "vault_auth_backend" "approle_ssh" {
   type      = "approle"
   path      = "approle"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.ssh.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.ssh.path}"
 }
 
 # JWT Auth Methods
 resource "vault_jwt_auth_backend" "jwt_cicd" {
-  namespace           = "admin/${vault_namespace.project.path}/${vault_namespace.cicd.path}"
+  namespace           = "${vault_namespace.project.path}/${vault_namespace.cicd.path}"
   path                = "jwt"
   jwks_url            = "https://example.com/.well-known/jwks.json"
   bound_issuer        = "https://example.com/"
 }
 
 resource "vault_jwt_auth_backend" "jwt_encryption" {
-  namespace           = "admin/${vault_namespace.project.path}/${vault_namespace.encryption.path}"
+  namespace           = "${vault_namespace.project.path}/${vault_namespace.encryption.path}"
   path                = "jwt"
   jwks_url            = "https://example.com/.well-known/jwks.json"
   bound_issuer        = "https://example.com/"
@@ -35,31 +35,31 @@ resource "vault_jwt_auth_backend" "jwt_encryption" {
 resource "vault_auth_backend" "kubernetes" {
   type      = "kubernetes"
   path      = "kubernetes"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.kubernetes.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.kubernetes.path}"
 }
 
 # TLS Certificate Auth
 resource "vault_auth_backend" "tls_pki_web" {
   type      = "cert"
   path      = "cert"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.pki_web.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.pki_web.path}"
 }
 
 resource "vault_auth_backend" "tls_encryption" {
   type      = "cert"
   path      = "cert"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.encryption.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.encryption.path}"
 }
 
 resource "vault_auth_backend" "tls_x509" {
   type      = "cert"
   path      = "cert"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.x509.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.x509.path}"
 }
 
 # OIDC Auth
 resource "vault_jwt_auth_backend" "oidc_cloud" {
-  namespace           = "admin/${vault_namespace.project.path}/${vault_namespace.cloud.path}"
+  namespace           = "${vault_namespace.project.path}/${vault_namespace.cloud.path}"
   path                = "oidc"
   type                = "oidc"
   oidc_discovery_url  = "https://example.com/"
@@ -72,11 +72,11 @@ resource "vault_jwt_auth_backend" "oidc_cloud" {
 resource "vault_auth_backend" "userpass_batch" {
   type      = "userpass"
   path      = "userpass"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.batch.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.batch.path}"
 }
 
 resource "vault_auth_backend" "userpass_security" {
   type      = "userpass"
   path      = "userpass"
-  namespace = "admin/${vault_namespace.project.path}/${vault_namespace.security.path}"
+  namespace = "${vault_namespace.project.path}/${vault_namespace.security.path}"
 }
