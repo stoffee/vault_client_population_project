@@ -18,7 +18,7 @@ resource "vault_auth_backend" "approle_ssh" {
 
 # JWT Auth Methods
 resource "vault_jwt_auth_backend" "jwt_cicd" {
-  namespace           = "${vault_namespace.admin.path}/${vault_namespace.cicd.path}"
+  namespace           = "${data.vault_namespace.admin.path}/${vault_namespace.project.path}/${vault_namespace.cicd.path}"
   path                = "jwt"
   jwks_url            = "https://example.com/.well-known/jwks.json"
   bound_issuer        = "https://example.com/"

@@ -4,7 +4,7 @@ data "vault_namespace" "admin" {
 
 resource "vault_namespace" "databases" {
   path      = "databases"
-  namespace = vault_namespace.admin.path
+  namespace = "${data.vault_namespace.admin.path}/${vault_namespace.project.path}"
 }
 
 resource "vault_namespace" "project" {
