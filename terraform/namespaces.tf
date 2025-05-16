@@ -5,7 +5,7 @@ resource "vault_namespace" "databases" {
 
 resource "vault_namespace" "project" {
   path      = var.project_namespace
-  namespace = "admin"
+  #namespace = "admin"
 }
 
 resource "vault_namespace" "kubernetes" {
