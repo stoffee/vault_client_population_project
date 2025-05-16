@@ -1,7 +1,7 @@
 resource "vault_auth_backend" "approle_databases" {
   type      = "approle"
   path      = "approle"
-  namespace = "${${data.vault_namespace.admin.path}/${vault_namespace.project.path}/${vault_namespace.databases.path}"
+  namespace = "${data.vault_namespace.admin.path}/${vault_namespace.project.path}/${vault_namespace.databases.path}"
 }
 
 resource "vault_auth_backend" "approle_pki_internal" {
