@@ -91,38 +91,39 @@ resource "vault_token" "encryption_token" {
   display_name    = "encryption-service-client"
 }
 
-# Create dummy cert for TLS auth demo
-resource "local_file" "dummy_client_cert" {
-  filename = "${path.module}/dummy-client-cert.pem"
-  content = <<EOF
------BEGIN CERTIFICATE-----
-MIIDazCCAlOgAwIBAgIUJlq+zz9CO2gJbGOEAgRVN3FNWjEwDQYJKoZIhvcNAQEL
-BQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM
-GEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yMzA0MjAxNDQzMzZaFw0yMzA1
-MjAxNDQzMzZaMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEw
-HwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwggEiMA0GCSqGSIb3DQEB
-AQUAA4IBDwAwggEKAoIBAQDPeRhE2uJqPrUf5jZUEKQw5F/MJjwO8ECNihIKKjH5
-LpKnJnJZ6rQNXwvmjGpUYDw7DhHhOhS2JbUQU5MykCr4WwJ4JTFLsA8JQP9fu9h/
-7GxZOYCpxZJnXUEgpfGEJQy1JLjzZTNYEIMMXlUgYggOgENET+6xBuYIoKNQULKh
-NADjMbzxVLJQkbsWreAXLWgbO/DeAA1SMqwBQHgQzvf0x7BcrmQGzJOvuS8XIn8O
-JdU04UmVGGjD/jT4vhZ8i5aGDJFjWEYzJBJ3P7sgMZQQ8qK5MpKPgWGTUjyaM/z6
-k658LHiVwlWKEliUcLnXqqJGpNwFQiJMUQXomAk9X7GDAgMBAAGjUzBRMB0GA1Ud
-DgQWBBSFC1vGuqIgzgR7BUwl3aaNNLHG0TAfBgNVHSMEGDAWgBSFC1vGuqIgzgR7
-BUwl3aaNNLHG0TAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQDK
-JTEuRWp3DFfM8BoHtUuQ8YaKFwOx6VAj5g8gBHFhKcEPlfuBaMcgsw5wZL90lZAP
-EOF
-  file_permission = "0600"
-}
 
 # Web certificate role - TLS auth
+# Generate a proper certificate for TLS auth
+resource "tls_private_key" "cert_key" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
+
+resource "tls_self_signed_cert" "cert" {
+  private_key_pem = tls_private_key.cert_key.private_key_pem
+  
+  subject {
+    common_name  = "client.example.com"
+    organization = "HashiCorp, Inc"
+  }
+
+  validity_period_hours = 24
+  
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "client_auth",
+  ]
+}
+
+# Use the valid certificate
 resource "vault_cert_auth_backend_role" "web_cert_role" {
-  namespace = "${vault_namespace.project.path}/${vault_namespace.pki_web.path}"
-  backend   = vault_auth_backend.tls_pki_web.path
-  name      = "web-cert-role"
-  certificate = local_file.dummy_client_cert.content
+  namespace      = "${vault_namespace.project.path}/${vault_namespace.pki_web.path}"
+  backend        = vault_auth_backend.tls_pki_web.path
+  name           = "web-cert-role"
+  certificate    = tls_self_signed_cert.cert.cert_pem
   token_policies = [vault_policy.web_cert_expanded.name]
-  token_ttl = 3600
-  depends_on = [local_file.dummy_client_cert]
+  token_ttl      = 3600
 }
 
 # CI/CD pipeline - JWT auth

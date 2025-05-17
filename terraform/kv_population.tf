@@ -310,14 +310,6 @@ resource "vault_pki_secret_backend_role" "internal" {
   require_cn          = false
 }
 
-# SSH signing key
-resource "vault_ssh_secret_backend_ca" "ssh_ca" {
-  namespace  = "${vault_namespace.project.path}/${vault_namespace.ssh.path}"
-  backend    = vault_mount.ssh.path
-  private_key = "dummy-key" # In production this would be a real private key
-  public_key = "dummy-public-key" # In production this would be a real public key
-}
-
 # Dummy SSH signing role
 resource "vault_ssh_secret_backend_role" "ssh_role" {
   namespace      = "${vault_namespace.project.path}/${vault_namespace.ssh.path}"
@@ -328,4 +320,18 @@ resource "vault_ssh_secret_backend_role" "ssh_role" {
   allowed_users  = "*"
   default_user   = "ubuntu"
   ttl            = "24h"
+}
+
+# Generate an SSH key pair
+resource "tls_private_key" "ssh_ca_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# Configure SSH CA with the generated key
+resource "vault_ssh_secret_backend_ca" "ssh_ca" {
+  namespace   = "${vault_namespace.project.path}/${vault_namespace.ssh.path}"
+  backend     = vault_mount.ssh.path
+  private_key = tls_private_key.ssh_ca_key.private_key_pem
+  public_key  = tls_private_key.ssh_ca_key.public_key_openssh
 }
