@@ -99,10 +99,12 @@ resource "vault_cert_auth_backend_role" "web_cert_role" {
   namespace = "${vault_namespace.project.path}/${vault_namespace.pki_web.path}"
   backend   = vault_auth_backend.tls_pki_web.path
   name      = "web-cert-role"
-  certificate = file("${path.module}/dummy-client-cert.pem") # Create this file separately
+  certificate = file("${path.module}/dummy-client-cert.pem")
   token_policies = [vault_policy.web_cert_expanded.name]
   token_ttl = 3600
+  depends_on = [local_file.dummy_client_cert]
 }
+
 
 # CI/CD pipeline - JWT auth
 resource "vault_jwt_auth_backend_role" "cicd_role" {
@@ -183,18 +185,18 @@ resource "local_file" "client_credentials" {
   filename = "${path.module}/client_credentials.json"
   content = jsonencode({
     database_rotation = {
-      role_id = vault_approle_auth_backend_role_id.db_rotation_role_id.role_id,
-      secret_id = vault_approle_auth_backend_secret_id.db_rotation_secret_id.secret_id,
+      role_id = data.vault_approle_auth_backend_role_id.db_rotation_role_id.role_id,
+      secret_id = vault_approle_auth_backend_role_secret_id.db_rotation_secret_id.secret_id,
       namespace = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
     },
     certificate_renewal = {
-      role_id = vault_approle_auth_backend_role_id.cert_renewal_role_id.role_id,
-      secret_id = vault_approle_auth_backend_secret_id.cert_renewal_secret_id.secret_id,
+      role_id = data.vault_approle_auth_backend_role_id.cert_renewal_role_id.role_id,
+      secret_id = vault_approle_auth_backend_role_secret_id.cert_renewal_secret_id.secret_id,
       namespace = "${vault_namespace.project.path}/${vault_namespace.pki_internal.path}"
     },
     ssh_rotation = {
-      role_id = vault_approle_auth_backend_role_id.ssh_rotation_role_id.role_id,
-      secret_id = vault_approle_auth_backend_secret_id.ssh_rotation_secret_id.secret_id,
+      role_id = data.vault_approle_auth_backend_role_id.ssh_rotation_role_id.role_id,
+      secret_id = vault_approle_auth_backend_role_secret_id.ssh_rotation_secret_id.secret_id,
       namespace = "${vault_namespace.project.path}/${vault_namespace.ssh.path}"
     },
     app_version = {
