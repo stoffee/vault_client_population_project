@@ -150,6 +150,7 @@ resource "vault_token" "cross_namespace_tokens" {
   depends_on = [vault_policy.cross_namespace_access]
 }
 
+/*
 # Batch processing - Username/Password auth
 resource "vault_generic_endpoint" "batch_user" {
   namespace = "${vault_namespace.project.path}/${vault_namespace.batch.path}"
@@ -175,6 +176,7 @@ resource "vault_generic_endpoint" "security_admin" {
 
   depends_on = [vault_auth_backend.userpass_security]
 }
+*/
 
 # Create credential lookup file for client scripts
 resource "local_file" "client_credentials" {
