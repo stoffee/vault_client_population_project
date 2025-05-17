@@ -59,6 +59,7 @@ resource "vault_auth_backend" "tls_x509" {
   namespace = "${vault_namespace.project.path}/${vault_namespace.x509.path}"
 }
 
+/*
 # OIDC Auth
 resource "vault_jwt_auth_backend" "oidc_cloud" {
   namespace           = "${vault_namespace.project.path}/${vault_namespace.cloud.path}"
@@ -69,6 +70,7 @@ resource "vault_jwt_auth_backend" "oidc_cloud" {
   oidc_client_secret  = "example-client-secret"
   default_role        = "cloud_role"
 }
+*/
 
 # Username/Password Auth
 resource "vault_auth_backend" "userpass_batch" {
