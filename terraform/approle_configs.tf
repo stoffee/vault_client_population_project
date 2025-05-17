@@ -119,7 +119,7 @@ resource "vault_cert_auth_backend_role" "web_cert_role" {
   namespace = "${vault_namespace.project.path}/${vault_namespace.pki_web.path}"
   backend   = vault_auth_backend.tls_pki_web.path
   name      = "web-cert-role"
-  certificate = file("${path.module}/dummy-client-cert.pem")
+  certificate = local_file.dummy_client_cert.content
   token_policies = [vault_policy.web_cert_expanded.name]
   token_ttl = 3600
   depends_on = [local_file.dummy_client_cert]
