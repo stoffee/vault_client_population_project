@@ -17,6 +17,42 @@ resource "vault_mount" "kv_shared" {
   }
 }
 
+resource "vault_mount" "kv_cicd" {
+  namespace = "${vault_namespace.project.path}/${vault_namespace.cicd.path}"
+  path      = "kv"
+  type      = "kv"
+  options = {
+    version = "2"
+  }
+}
+
+resource "vault_mount" "kv_batch" {
+  namespace = "${vault_namespace.project.path}/${vault_namespace.batch.path}"
+  path      = "kv"
+  type      = "kv"
+  options = {
+    version = "2"
+  }
+}
+
+resource "vault_mount" "kv_kubernetes" {
+  namespace = "${vault_namespace.project.path}/${vault_namespace.kubernetes.path}"
+  path      = "kv"
+  type      = "kv"
+  options = {
+    version = "2"
+  }
+}
+
+resource "vault_mount" "kv_security" {
+  namespace = "${vault_namespace.project.path}/${vault_namespace.security.path}"
+  path      = "kv"
+  type      = "kv"
+  options = {
+    version = "2"
+  }
+}
+
 # Database Secrets Engine
 resource "vault_mount" "db_databases" {
   namespace = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
