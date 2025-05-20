@@ -2,7 +2,7 @@
 resource "vault_approle_auth_backend_role" "db_rotation" {
   namespace           = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
   backend             = vault_auth_backend.approle_databases.path
-  role_name           = "db-rotation-role"
+  role_name           = "db-rotation-approle-role"
   token_ttl           = 3600
   token_max_ttl       = 7200
   token_policies      = [vault_policy.db_client_expanded.name]
