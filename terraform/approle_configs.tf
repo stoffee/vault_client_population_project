@@ -20,6 +20,27 @@ resource "vault_approle_auth_backend_role_secret_id" "db_rotation_secret_id" {
   role_name           = vault_approle_auth_backend_role.db_rotation.role_name
 }
 
+resource "vault_approle_auth_backend_role" "db_rotation_nugget" {
+  namespace           = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
+  backend             = vault_auth_backend.approle_databases.path
+  role_name           = "db-rotation-nugget-role"
+  token_ttl           = 3600
+  token_max_ttl       = 7200
+  token_policies      = [vault_policy.db_client_expanded.name]
+}
+
+data "vault_approle_auth_backend_role_id" "db_rotation_nugget_role_id" {
+  namespace           = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
+  backend             = vault_auth_backend.approle_databases.path
+  role_name           = vault_approle_auth_backend_role.db_rotation_nugget.role_name
+}
+
+resource "vault_approle_auth_backend_role_secret_id" "db_rotation_nugget_secret_id" {
+  namespace           = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
+  backend             = vault_auth_backend.approle_databases.path
+  role_name           = vault_approle_auth_backend_role.db_rotation_nugget.role_name
+}
+
 # Internal certificate renewal - lilikoi
 resource "vault_approle_auth_backend_role" "cert_renewal" {
   namespace           = "${vault_namespace.project.path}/${vault_namespace.pki_internal.path}"

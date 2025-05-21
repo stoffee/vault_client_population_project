@@ -8,13 +8,22 @@ output "encryption_service_credentials" {
   description = "Encryption service credentials for lilikoi"
 }
 
-output "db_rotation_credentials" {
+output "db_rotation_thiccboi_credentials" {
   value = {
     role_id = data.vault_approle_auth_backend_role_id.db_rotation_role_id.role_id
     secret_id = nonsensitive(vault_approle_auth_backend_role_secret_id.db_rotation_secret_id.secret_id)
     namespace = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
   }
-  description = "Database rotation AppRole Creds"
+  description = "Database rotation AppRole credentials for thiccboi"
+}
+
+output "db_rotation_nugget_credentials" {
+  value = {
+    role_id = data.vault_approle_auth_backend_role_id.db_rotation_nugget_role_id.role_id
+    secret_id = nonsensitive(vault_approle_auth_backend_role_secret_id.db_rotation_nugget_secret_id.secret_id)
+    namespace = "${vault_namespace.project.path}/${vault_namespace.databases.path}"
+  }
+  description = "Database rotation AppRole credentials for nugget"
 }
 
 output "cert_renewal_credentials" {
