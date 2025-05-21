@@ -84,3 +84,9 @@ resource "vault_auth_backend" "userpass_security" {
   path      = "userpass"
   namespace = "${vault_namespace.project.path}/${vault_namespace.security.path}"
 }
+
+resource "vault_auth_backend" "jwt_cicd" {
+  namespace = "${vault_namespace.project.path}/${vault_namespace.cicd.path}"
+  type      = "jwt"
+  path      = "jwt"
+}
