@@ -1,7 +1,11 @@
 # Output credentials for use in client scripts
-output "client_credentials_file" {
-  value = local_file.client_credentials.filename
-  description = "Path to the generated client credentials file"
+# Replace the existing client_credentials_file output with:
+output "encryption_service_credentials" {
+  value = {
+    token     = nonsensitive(vault_token.encryption_token.client_token)
+    namespace = "${vault_namespace.project.path}/${vault_namespace.encryption.path}"
+  }
+  description = "Encryption service credentials for lilikoi"
 }
 
 output "db_rotation_credentials" {

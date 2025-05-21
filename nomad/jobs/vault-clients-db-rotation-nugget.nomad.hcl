@@ -83,6 +83,30 @@ fi
 
 log "${GREEN}Authentication successful!${NC}"
 
+  # Add token renewal logic here
+log "Checking token TTL and renewing if needed..."
+TOKEN_TTL=$(curl -s \
+  --header "X-Vault-Token: $VAULT_TOKEN" \
+  --header "X-Vault-Namespace: $NAMESPACE" \
+  --request GET \
+  "$VAULT_ADDR/v1/auth/token/lookup-self" | jq -r '.data.ttl')
+
+log "Token TTL: $TOKEN_TTL seconds"
+
+# If TTL is less than 1 hour (3600 seconds), renew
+if [ "$TOKEN_TTL" -lt 3600 ]; then
+  log "Renewing token..."
+  RENEW_RESPONSE=$(curl -s \
+    --header "X-Vault-Token: $VAULT_TOKEN" \
+    --header "X-Vault-Namespace: $NAMESPACE" \
+    --request POST \
+    "$VAULT_ADDR/v1/auth/token/renew-self")
+  
+  NEW_TTL=$(echo "$RENEW_RESPONSE" | jq -r '.auth.lease_duration')
+  log "Token renewed. New TTL: $NEW_TTL seconds"
+fi
+  
+
 # Since we don't have a real database connection, let's simulate one
 # by generating random credentials ourselves
 log "Simulating database credential generation"
@@ -163,7 +187,6 @@ EOT
         VAULT_ROLE_ID = "YOUR-ROLE-ID-HERE"
         VAULT_SECRET_ID = "YOUR-SECRET_ID-HERE"
       }
-
       resources {
         cpu    = 200
         memory = 256
@@ -175,3 +198,4 @@ EOT
     }
   }
 }
+
