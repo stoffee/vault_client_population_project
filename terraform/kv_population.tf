@@ -231,6 +231,7 @@ resource "vault_transit_secret_backend_key" "encryption_key" {
   name      = "app-encryption-key"
   derived   = true
   type      = "aes256-gcm96"
+  deletion_allowed = true
 }
 
 resource "vault_transit_secret_backend_key" "signing_key" {
@@ -238,6 +239,7 @@ resource "vault_transit_secret_backend_key" "signing_key" {
   backend   = vault_mount.transit_encryption.path
   name      = "document-signing-key"
   type      = "ed25519"
+  deletion_allowed = true
 }
 
 # Set up dummy users for password auth
