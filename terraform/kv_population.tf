@@ -116,6 +116,7 @@ resource "vault_kv_secret_v2" "cicd_environments" {
     timeout       = random_integer.timeout_values[each.value].result
     max_instances = each.value * 2 + 2
   })
+  depends_on = [vault_mount.kv_cicd]
 }
 
 # Shared namespace KV data
