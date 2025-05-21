@@ -140,7 +140,7 @@ resource "vault_jwt_auth_backend_role" "cicd_role" {
   bound_claims = {
     pipeline = "*"
   }
-  depends_on = [vault_auth_backend.jwt_cicd]
+  depends_on = [vault_namespace.cicd]
 }
 
 # Kubernetes auth
