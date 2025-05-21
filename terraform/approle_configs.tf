@@ -205,7 +205,7 @@ resource "local_file" "client_credentials" {
     },
     batch_user = {
       username = "batch-processor",
-      password = "batch-demo-password",
+      password = "dummy-password-for-testing",
       namespace = "${vault_namespace.project.path}/${vault_namespace.batch.path}"
     },
     security_admin = {

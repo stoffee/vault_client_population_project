@@ -249,7 +249,6 @@ resource "vault_generic_endpoint" "batch_user" {
     password = "dummy-password-for-testing"
     policies = ["batch-job-policy"]
   })
-
   depends_on = [vault_auth_backend.userpass_batch]
 }
 
