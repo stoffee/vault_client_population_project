@@ -129,7 +129,7 @@ resource "vault_cert_auth_backend_role" "web_cert_role" {
 # CI/CD pipeline - JWT auth
 resource "vault_jwt_auth_backend_role" "cicd_role" {
   namespace      = "${vault_namespace.project.path}/${vault_namespace.cicd.path}"
-  backend        = "jwt" # Should match your auth backend path
+  backend        = vault_auth_backend.jwt_cicd.path
   role_name      = "cicd-role"
   token_policies = [vault_policy.cicd_environments.name]
   
